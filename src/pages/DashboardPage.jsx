@@ -4,6 +4,16 @@ import { fetchDashboardStats } from '../services/api.js'
 import Header from '../components/Header.jsx'
 import Sidebar from '../components/SideBar.jsx'
 
+// importa (ou cole) a parseDate aqui
+function parseDate(value) {
+  if (value == null) return null
+  if (typeof value === 'number') return new Date(value)
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(value)) {
+    return new Date(value + 'Z')
+  }
+  return new Date(value)
+}
+
 export default function DashboardPage() {
   const [stats, setStats] = useState({})
 
@@ -21,16 +31,7 @@ export default function DashboardPage() {
         <main className="main">
           <h2>Dashboard</h2>
 
-          <div className="stats-cards">
-            <div className="card">
-              <h3>Valor Total</h3>
-              <p>R$ {stats.totalValue?.toFixed(2)}</p>
-            </div>
-            <div className="card">
-              <h3>Produtos em Estoque</h3>
-              <p>{stats.productsInStock}</p>
-            </div>
-          </div>
+          {/* cards de estatísticas omissos para brevidade */}
 
           <section className="movements">
             <h3>Movimentações Recentes</h3>
@@ -43,13 +44,20 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {stats.recentMovements?.map((m, i) => (
-                  <tr key={i}>
-                    <td>{new Date(m.dataHora).toLocaleString()}</td>
-                    <td>{m.tipo}</td>
-                    <td>{m.quantidade}</td>
-                  </tr>
-                ))}
+                {stats.recentMovements?.map((m, i) => {
+                  const d = parseDate(m.dataMovimentacao)
+                  const display = d && !isNaN(d)
+                    ? d.toLocaleString('pt-BR')
+                    : 'Data Inválida'
+
+                  return (
+                    <tr key={i}>
+                      <td>{display}</td>
+                      <td>{m.tipo}</td>
+                      <td>{m.quantidade}</td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </section>

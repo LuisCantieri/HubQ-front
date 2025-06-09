@@ -49,15 +49,26 @@ export default function MovementPage() {
               </tr>
             </thead>
             <tbody>
-              {movements.map((m, idx) => (
-                <tr key={m.id ?? idx}>
-                  <td>{new Date(m.dataHora).toLocaleString()}</td>
-                  <td>{m.tipo}</td>
-                  <td>{m.quantidade}</td>
-                  <td>{m.descricao || '-'}</td>
-                </tr>
-              ))}
-            </tbody>
+  {movements.map((m, idx) => {
+    // Cria o objeto Date a partir do campo correto
+    const dataObj = new Date(m.dataMovimentacao)
+
+    // Valida antes de formatar
+    const dataFormatada =
+      m.dataMovimentacao && !isNaN(dataObj)
+        ? dataObj.toLocaleString('pt-BR')
+        : 'Data Inválida'
+
+    return (
+      <tr key={m.id ?? idx}>
+        <td>{dataFormatada}</td>
+        <td>{m.tipo}</td>
+        <td>{m.quantidade}</td>
+        <td>{m.descricao || '-'}</td>
+      </tr>
+    )
+  })}
+</tbody>
           </table>
         </main>
       </div>
