@@ -1,4 +1,3 @@
-// src/pages/QuadrinhosCatalogPage.jsx
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
@@ -26,6 +25,19 @@ export default function QuadrinhosCatalogPage() {
     }
     load()
   }, [])
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Tem certeza que deseja excluir este quadrinho?')) {
+      try {
+        await api.deleteQuadrinho(id)
+        setCatalog(catalog.filter(q => q.id !== id))
+        alert('Quadrinho excluído com sucesso!')
+      } catch (err) {
+        console.error('Erro ao excluir quadrinho:', err)
+        alert('Erro ao excluir quadrinho: ' + err.message)
+      }
+    }
+  }
 
   if (loading) return <p>Carregando catálogo...</p>
   if (error)   return <p style={{ color: 'red' }}>{error}</p>
@@ -63,14 +75,28 @@ export default function QuadrinhosCatalogPage() {
                   <td>R$ {Number(q.preco ?? 0).toFixed(2)}</td>
                   <td>{q.raridade}</td>
                   <td>
-                    <button
-                      className="btnAddInv"
-                      onClick={() =>
-                        navigate(`/add-to-inventory?quadrinhoId=${q.id}`)
-                      }
-                    >
-                      Adicionar ao Inventário
-                    </button>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <button
+                        className="btnEdit"
+                        onClick={() => navigate(`/edit-quadrinho/${q.id}`)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="btnAddInv"
+                        onClick={() =>
+                          navigate(`/add-to-inventory?quadrinhoId=${q.id}`)
+                        }
+                      >
+                        Adicionar ao Inventário
+                      </button>
+                      <button
+                        className="btnDelete"
+                        onClick={() => handleDelete(q.id)}
+                      >
+                        Excluir
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

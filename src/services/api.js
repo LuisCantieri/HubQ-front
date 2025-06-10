@@ -1,4 +1,3 @@
-// src/services/api.js
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080"
 
 /**
@@ -103,7 +102,7 @@ export async function fetchQuadrinhoCatalog() {
 }
 
 /** 
- * @param {{ titulo: string, autor: string, precoUnitario: number }} data 
+ * @param {{ codigo: string, nome: string, preco: number, raridade: string, urlImagem: string }} data 
  */
 export async function createQuadrinho(data) {
   return post('/api/quadrinho', data)
@@ -118,10 +117,17 @@ export async function deleteQuadrinho(id) {
 
 /**
  * @param {number} id 
- * @param {{ titulo?: string, autor?: string, precoUnitario?: number }} data 
+ * @param {{ codigo?: string, nome?: string, preco?: number, raridade?: string, urlImagem?: string }} data 
  */
 export async function updateQuadrinho(id, data) {
   return put(`/api/quadrinho/${id}`, data)
+}
+
+/**
+ * @param {number} id 
+ */
+export async function getQuadrinho(id) {
+  return get(`/api/quadrinho/${id}`)
 }
 
 export default {
@@ -132,5 +138,5 @@ export default {
   // dashboard/inventory
   fetchDashboardStats, fetchInventorySummary, fetchInventoryStock, addToInventory,
   // quadrinhos
-  fetchQuadrinhoCatalog, createQuadrinho, updateQuadrinho, deleteQuadrinho
+  fetchQuadrinhoCatalog, createQuadrinho, updateQuadrinho, deleteQuadrinho, getQuadrinho
 }

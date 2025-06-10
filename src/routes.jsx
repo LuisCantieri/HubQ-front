@@ -1,4 +1,3 @@
-// src/AppRoutes.jsx
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 // Páginas
@@ -9,8 +8,9 @@ import InventoryPage from './pages/InventoryPage'
 import MovementPage from './pages/MovementPage'
 import ReportsPage from './pages/ReportsPage'
 import QuadrinhosCatalogPage from './pages/QuadrinhosCatalogPage'
-import AddToInventoryPage from './pages/AddToInventoryPage'
-import AddQuadrinhoPage from './pages/AddQuadrinhoPage'  // <-- import adicionado
+import AddToInventoryPage from './pages/addToInventoryPage'
+import AddQuadrinhoPage from './pages/AddQuadrinhoPage'
+import EditQuadrinhoPage from './pages/EditQuadrinhoPage'  // <-- novo import
 
 function Private({ children }) {
   const token = localStorage.getItem('token')
@@ -76,12 +76,22 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Nova rota: adicionar quadrinho */}
+      {/* Rota: adicionar quadrinho */}
       <Route
         path="/add-quadrinho"
         element={
           <Private>
             <AddQuadrinhoPage />
+          </Private>
+        }
+      />
+
+      {/* Nova rota: editar quadrinho */}
+      <Route
+        path="/edit-quadrinho/:id"
+        element={
+          <Private>
+            <EditQuadrinhoPage />
           </Private>
         }
       />
