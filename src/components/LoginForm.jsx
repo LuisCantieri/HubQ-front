@@ -1,7 +1,10 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+
+const API_BASE = import.meta.env.VITE_API_URL ||
+  "https://hubq-gzfhhrg0acgqhfh5.brazilsouth-01.azurewebsites.net/api";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -15,30 +18,35 @@ const LoginForm = () => {
     setError("");
 
     try {
-      const response = await fetch("http://hubq-gzfhhrg0acgqhfh5.brazilsouth-01.azurewebsites.net/api", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ login: username, password }),
-      });
+      const response = await axios.post(
+        `${API_BASE}/auth/login`,
+        { email: username, password },
+        { headers: { "Content-Type": "application/json" }, withCredentials: true }
+      );
 
-      if (!response.ok) {
-        throw new Error("Credenciais inválidas");
+      const data = response.data;
+      if (data.token) {
+        // salva token/dados no contexto
+        login(data);
+        navigate("/");
+      } else {
+        throw new Error("Resposta inválida do servidor");
       }
-
-      const data = await response.json();
-      login(data); // salva o token/dados no contexto
-      navigate("/");
     } catch (err) {
-      setError(err.message);
+      // Trata erro de credenciais ou servidor
+      if (axios.isAxiosError(err)) {
+        const message = err.response?.data?.message || err.message;
+        setError(message);
+      } else {
+        setError(err.message);
+      }
     }
   };
 
   return (
     <div style={styles.container}>
       <h2>Login</h2>
-      <div onSubmit={handleSubmit} style={styles.form}>
+      <form onSubmit={handleSubmit} style={styles.form}>
         <input
           type="text"
           placeholder="Usuário"
@@ -57,7 +65,7 @@ const LoginForm = () => {
         />
         <button type="submit" style={styles.button}>Entrar</button>
         {error && <p style={styles.error}>{error}</p>}
-      </div>
+      </form>
     </div>
   );
 };
