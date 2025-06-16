@@ -57,7 +57,7 @@ export default function InventoryPage() {
       if (editing) {
         // Ajuste de estoque
         await api.put(
-          `/api/inventory/adjust/${quadrinhoId}`,
+          `/inventory/adjust/${quadrinhoId}`,
           {
             newQuantity: quantidade,
             description: 'Ajuste manual pelo usuário'
@@ -94,7 +94,7 @@ export default function InventoryPage() {
     if (!window.confirm('Tem certeza que deseja remover este item do inventário?')) return
     try {
       setLoadingInv(true)
-      await api.del(`/api/inventory/delete/${item.quadrinho.id}`)
+      await api.del(`/inventory/delete/${item.quadrinho.id}`)
       await loadInventory()
     } catch (err) {
       console.error('Erro ao excluir:', err)

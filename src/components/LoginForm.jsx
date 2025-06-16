@@ -15,7 +15,7 @@ const LoginForm = () => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
+      const response = await fetch("hubq-gzfhhrg0acgqhfh5.brazilsouth-01.azurewebsites.net", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
