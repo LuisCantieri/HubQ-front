@@ -15,7 +15,7 @@ const LoginForm = () => {
     setError("");
 
     try {
-      const response = await fetch("hubq-gzfhhrg0acgqhfh5.brazilsouth-01.azurewebsites.net", {
+      const response = await fetch("http://hubq-gzfhhrg0acgqhfh5.brazilsouth-01.azurewebsites.net/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

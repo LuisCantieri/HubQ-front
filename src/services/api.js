@@ -1,6 +1,5 @@
 // src/services/api.js
 const API_BASE = import.meta.env.VITE_API_URL || "https://hubq-gzfhhrg0acgqhfh5.brazilsouth-01.azurewebsites.net/api";
-
 /** Retorna cabeçalhos de autenticação se existir token em localStorage */
 function getAuthHeaders() {
   const token = localStorage.getItem('token');
